@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src='dialog.js'> </script>
+<link rel="stylesheet" type="text/css" href="dialog.css">
+
+<script>
+function signupClicked()
+{
+  dialogLib.prompt.show("Sign Up: ", "Go", "Cancel", function(data){alert("Welcome " + data + "!")}, function(data){alert("Goodbye " + data)});
+}
+function loginClicked()
+{
+  dialogLib.prompt.show("Login: ", "Go", "Cancel", function(data){alert("Welcome back " + data + "!")}, function(data){alert("See you later " + data)});
+}
+</script>
+</head>
+
+<body>
+  <button onclick='signupClicked()'> Sign Up </button>
+  <button onclick='loginClicked()'> Login </button>
+</body>
+
+
+</html>
