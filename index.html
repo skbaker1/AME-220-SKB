@@ -1,141 +1,26 @@
 <!doctype html>
 <html>
 <head>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1.0">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<style>
-.nowSelected{
-  background: gold;
-}
-@media (max-width: 480px){ //small screen
-  #list{
-    width: 100%;
-  }
-  body.selected #list{
-    display:none;
-  }
-  #selectedItem{
-    width: 100%;
-    display: none;
-  }
-  body.selected #selectedItem{
-    display: block;
-  }
-  body.selected #backButton{
-    display: block;
-  }
-}
-@media (min-width: 480px){ // big screen
-  #backButton
-  {
-      display: none;
-  }
-  #list{
-    width: 220px;
-  }
-  #selectedItem{
-    width: calc(100% - 240px);
-  }
-}
-#selectedItem
-{
-    position: absolute;
-    right: 0px;
-    top: 80px;
-    min-height: 200px;
-    text-align: center;
-    background: rgba(0,0,0,.1);
-}
-#list button{
-  display: block;
-  width: 100%;
-}
-#list button img{
-  width: 50px;
-  height: 50px;
-  float: left;
-}
-#list button h1, #list button h2{
-    text-align: left;
-    width: calc(100% - 60px);
-    margin: 0px;
-    margin-left: 60px;
-}
-</style>
-<script src="asyncReq.js"> </script>
+<script src='dialog.js'> </script>
+<link rel="stylesheet" type="text/css" href="dialog.css">
+
 <script>
-var items;
-function itemSelected(id)
+function signupClicked()
 {
-  var markup = "<button onclick='goBack()' id='backButton'> Back </button>";
-    markup += "<img src='" + items[id].artworkUrl100 + "'>";
-    markup += "<a target='_blank' href='" + items[id].url + "'><h1>" + items[id].name + "</h1> (" + items[id].collectionName + ")</a>"
-    markup += "<a target='_blank' href='" + items[id].artistUrl + "'><h2>" + items[id].artistName + "</h2></a>"
-    var genres = items[id].genres;
-    markup += "<p> GENRES: <br>"
-    for(var i = 0; i < genres.length; i++){
-      markup += "<a target='_blank' href='" + genres[i].url + "'>" + genres[i].name+ "   </a></br>";
-    }
-    markup += "</p>"
-    markup += "<p>" + new Date(items[id].releaseDate).toDateString() + "</p>";
-    markup += "<p>" + items[id].copyright + "</p>";
-    document.getElementById("selectedItem").innerHTML = markup;
-    $("body").addClass("selected");
-    $("#list button").removeClass("nowSelected");
-    $("#list button:nth-of-type(" + (id+1)+ ")").addClass("nowSelected");
+  dialogLib.prompt.show("Sign Up: ", "Go", "Cancel", function(data){alert("Welcome " + data + "!")}, function(data){alert("Goodbye " + data)});
 }
-function loadFeed(url)
+function loginClicked()
 {
-  loadFile("./getFeed?url=" + url, function(data){
-    console.log(data);
-    data = JSON.parse(data);
-    items = data.feed.results;
-    console.log(items);
-    var markup = "";
-    for(var i = 0; i < items.length; i++){
-      markup += "<button onclick='itemSelected(" + i + ")'>"
-        markup += "<img src='" + items[i].artworkUrl100 + "'>";
-        markup += "<h1>" + items[i].name + "</h1>"
-        markup += "<h2>" + items[i].artistName + "</h2>"
-      markup += "</button>";
-    }
-    document.getElementById("list").innerHTML = markup;
-  });
-}
-function start()
-{
-	loadFeed('https://rss.itunes.apple.com/api/v1/us/apple-music/hot-tracks/all/10/non-explicit.json');
-}
-function selectChanged()
-{
-	//$("#list").removeClass("nowSelected");
-	//$("#list:nth-of-type(" + (id+1)+ ")").addClass("nowSelected");
-	var next = document.getElementById('theSelect').value;
-	document.getElementById("list").innerHTML = loadFeed(next);
-	
-}
-function goBack()
-{
-  $("body").removeClass("selected");
-  var x = '$("#list button").removeClass("nowSelected")'
-  setTimeout(x, 1000);
+  dialogLib.prompt.show("Login: ", "Go", "Cancel", function(data){alert("Welcome back " + data + "!")}, function(data){alert("See you later " + data)});
 }
 </script>
 </head>
 
-<body onload='start()'>
-<h1 style='display:inline-block;'> iTunes RSS READER</h1>
-
-<select id='theSelect' onchange='selectChanged()'> 
-  <option value='https://rss.itunes.apple.com/api/v1/us/apple-music/hot-tracks/all/10/non-explicit.json'> Hot tracks</option>
-  <option value='https://rss.itunes.apple.com/api/v1/us/itunes-music/new-music/all/10/non-explicit.json'> All tracks </option>
-  <option value='https://rss.itunes.apple.com/api/v1/us/itunes-music/recent-releases/all/10/non-explicit.json'> Recent </option>
-  <option value='https://rss.itunes.apple.com/api/v1/us/itunes-music/top-albums/all/10/non-explicit.json'> Albums </option>
-  <option value='https://rss.itunes.apple.com/api/v1/us/itunes-music/top-songs/all/10/non-explicit.json'> Songs </option>
-</select>
-
-<div id='list'> </div>
-<div id='selectedItem'> </div>
-
+<body>
+  <button onclick='signupClicked()'> Sign Up </button>
+  <button onclick='loginClicked()'> Login </button>
 </body>
+
+
 </html>

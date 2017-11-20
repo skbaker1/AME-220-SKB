@@ -1,8 +1,3 @@
-var Client = require('node-rest-client').Client;
- 
-var client = new Client();
-
-
 var express = require("express");
 var app = express();
 var bodyParser = require('body-parser');
@@ -12,13 +7,16 @@ var hostname = process.env.HOSTNAME || 'localhost';
 var port = 8080;
 
 
-app.get("/getFeed", function (req, res) {
-  var url = req.query.url
-  console.log(url)
+app.get("/add", function (req, res) {
+  var a = req.query.a
+  var b = req.query.b
   
-  client.get(url, function (data, response) {
-      res.send(data);
-  });
+  if(a == undefined || b == undefined){
+    res.send("malformed request")
+  }
+  else{
+    res.send((parseFloat(a)+parseFloat(b)).toString());
+  }
 });
 
 app.use(methodOverride());
